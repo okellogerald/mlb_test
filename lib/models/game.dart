@@ -1,30 +1,51 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:mlb_test1/models/status.dart';
-import 'package:mlb_test1/models/linescore.dart';
-part '../g_models/game.g.dart';
+import 'package:mlb_test1/source.dart';
 
-@JsonSerializable(explicitToJson: true)
+import 'inning.dart';
+import 'patcher.dart';
+import 'team.dart';
+
 class Game {
-  @JsonKey(name: 'home_team_name')
-  String homeTeamName;
+  final String id, venue, time, status, gameDateDirectory;
+  final Team homeTeam, awayTeam;
+  final Patcher winningPatcher, losingPatcher;
+  final Patcher? savingPatcher;
+  final List<Inning> innings;
 
-  @JsonKey(name: 'away_team_name')
-  String awayTeamName;
-
-  @JsonKey(name: 'status')
-  Status status;
-
-  @JsonKey(name: 'linescore')
-  Linescore linescore;
-
-  Game({
-      required this.homeTeamName,
-      required this.awayTeamName,
+  const Game(
+      {required this.id,
+      required this.homeTeam,
+      required this.awayTeam,
+      required this.venue,
+      required this.time,
       required this.status,
-      required this.linescore
-  });
+      required this.winningPatcher,
+      required this.losingPatcher,
+      required this.savingPatcher,
+      required this.gameDateDirectory,
+      required this.innings});
 
-  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+  factory Game.fromJson(var json) {
+    final jsonInnings = json['linescore']['inning'] as List;
+    final innings = jsonInnings.map((e) => Inning.fromJson(e)).toList();
+    return Game(
+        id: json['id'],
+        homeTeam: Team.fromJson(json, TeamStatus.home),
+        awayTeam: Team.fromJson(json, TeamStatus.away),
+        venue: json['venue'],
+        time: json['time'] + json['ampm'],
+        status: json['status']['status'],
+        winningPatcher: Patcher.fromJson(json['winning_pitcher'], 'WIN'),
+        losingPatcher: Patcher.fromJson(json['losing_pitcher'], 'LOSS'),
+        savingPatcher: ((json['save_pitcher'] as Map)['id'] as String).isEmpty
+            ? null
+            : Patcher.fromJson(json['save_pitcher'], 'SAVE'),
+        gameDateDirectory: json['game_data_directory'],
+        innings: innings);
+  }
 
-  Map<String, dynamic> toJson() => _$GameToJson(this);
+  List<Patcher> get patchers => savingPatcher == null
+      ? [winningPatcher, losingPatcher]
+      : [winningPatcher, losingPatcher, savingPatcher!];
+
+  Team get winningTeam => homeTeam.totalRuns > awayTeam.totalRuns ? homeTeam : awayTeam;
 }
