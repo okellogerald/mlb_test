@@ -14,7 +14,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  var selectedDate = DateTime(2015, 7, 28);
+  static final defaultDate = DateTime(2015, 7, 28);
+  final selectedDateNotifier = ValueNotifier<DateTime>(defaultDate);
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +32,25 @@ class _HomepageState extends State<Homepage> {
   }
 
   _buildAppBar() {
-    _onDateSelected(DateTime date) {
-      selectedDate == date;
-      setState(() {});
-    }
-
     return AppTopBar(onDateSelected: _onDateSelected);
   }
 
   _buildBody() {
-    return AppFutureBuilder<List<Game>>(
-      future: service.getGames(selectedDate),
-      onLoadedWidget: (games) {
-        if (games.isEmpty) {
-          return const Text('No games today');
-        } else {
-          return GamesGridView(games);
-        }
-      },
-    );
+    return ValueListenableBuilder<DateTime>(
+        valueListenable: selectedDateNotifier,
+        builder: (_, selectedDate, child) {
+          return AppFutureBuilder<List<Game>>(
+            future: service.getGames(selectedDate),
+            onLoadedWidget: (games) {
+              if (games.isEmpty) {
+                return const Center(child: Text('No games today'));
+              } else {
+                return GamesGridView(games);
+              }
+            },
+          );
+        });
   }
+
+  _onDateSelected(DateTime date) => selectedDateNotifier.value = date;
 }

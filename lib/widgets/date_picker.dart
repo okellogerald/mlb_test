@@ -12,7 +12,7 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  DateTime? selectedDate;
+  var selectedDate = DateTime(2015, 7, 28);
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +32,19 @@ class _DatePickerState extends State<DatePicker> {
   }
 
   String? _getFormattedDate() {
-    if (selectedDate == null) return null;
-    return Utils.getFormattedDate(selectedDate!);
+    return Utils.getFormattedDate(selectedDate);
   }
 
   _showDatePicker() async {
-    final selectedDate = await showDatePicker(
+    final date = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2022),
+        initialDate: selectedDate,
+        firstDate: DateTime(2014),
         lastDate: DateTime.now());
-    if (selectedDate != null) {
-      widget.onDateSelected(selectedDate);
+    if (date != null) {
+      selectedDate = date;
+      setState(() {});
+      widget.onDateSelected(date);
     }
   }
 }

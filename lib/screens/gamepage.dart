@@ -5,6 +5,8 @@ import 'package:mlb_test1/widgets/teams_switcher.dart';
 import '../models/batters.dart';
 import '../models/game.dart';
 import '../source.dart';
+import '../widgets/app_future_builder.dart';
+import '../widgets/team_stats_table.dart';
 
 class Gamepage extends StatefulWidget {
   const Gamepage(this.game, {Key? key}) : super(key: key);
@@ -33,7 +35,8 @@ class _GamepageState extends State<Gamepage> {
               homeTeamName: widget.game.homeTeam.name,
               awayTeamName: widget.game.awayTeam.name,
               onTeamsSwitched: _onTeamsSwitched),
-          _buildBatterDetails()
+          _buildBatterDetails(),
+          SizedBox(height: 20.dh)
         ]));
   }
 
@@ -52,24 +55,20 @@ class _GamepageState extends State<Gamepage> {
   }
 
   _buildBatterDetails() {
-    return FutureBuilder<Batters>(
+    return AppFutureBuilder<Batters>(
         future: service.getBothTeamsBatters(widget.game.gameDateDirectory),
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            final batters = snapshot.data!;
-            return ValueListenableBuilder<bool>(
-                valueListenable: isHomeTeamSelectedNotifier,
-                builder: (_, isHomeTeamSelected, child) {
-                  return TeamBatterDetailsTable(
-                      teamBatters: isHomeTeamSelected
-                          ? batters.homeTeamBatters
-                          : batters.awayTeamBatters,
-                      teamBatterDetails: isHomeTeamSelected
-                          ? batters.homeTeamTotals
-                          : batters.awayTeamTotals);
-                });
-          }
-          return const Center(child: CircularProgressIndicator());
+        onLoadedWidget: (batters) {
+          return ValueListenableBuilder<bool>(
+              valueListenable: isHomeTeamSelectedNotifier,
+              builder: (_, isHomeTeamSelected, child) {
+                return TeamStatsTable(
+                    teamBatters: isHomeTeamSelected
+                        ? batters.homeTeamBatters
+                        : batters.awayTeamBatters,
+                    teamBatterDetails: isHomeTeamSelected
+                        ? batters.homeTeamTotals
+                        : batters.awayTeamTotals);
+              });
         });
   }
 

@@ -1,5 +1,4 @@
 import 'package:mlb_test1/source.dart';
-
 import 'inning.dart';
 import 'patcher.dart';
 import 'team.dart';
@@ -25,8 +24,8 @@ class Game {
       required this.innings});
 
   factory Game.fromJson(var json) {
-    final jsonInnings = json['linescore']['inning'] as List;
-    final innings = jsonInnings.map((e) => Inning.fromJson(e)).toList();
+    final jsonInnings = json['linescore']['inning'] as List?;
+    final innings = jsonInnings?.map((e) => Inning.fromJson(e)).toList();
     return Game(
         id: json['id'],
         homeTeam: Team.fromJson(json, TeamStatus.home),
@@ -40,12 +39,15 @@ class Game {
             ? null
             : Patcher.fromJson(json['save_pitcher'], 'SAVE'),
         gameDateDirectory: json['game_data_directory'],
-        innings: innings);
+        innings: innings ?? []);
   }
 
   List<Patcher> get patchers => savingPatcher == null
       ? [winningPatcher, losingPatcher]
       : [winningPatcher, losingPatcher, savingPatcher!];
 
-  Team get winningTeam => homeTeam.totalRuns > awayTeam.totalRuns ? homeTeam : awayTeam;
+  Team get winningTeam =>
+      homeTeam.totalRuns > awayTeam.totalRuns ? homeTeam : awayTeam;
+
+  bool get wasPlayed => status == 'Final';
 }

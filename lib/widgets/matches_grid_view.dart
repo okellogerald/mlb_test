@@ -27,8 +27,10 @@ class GamesGridView extends StatelessWidget {
   _buildGameCard(Game game) {
     return Builder(builder: (context) {
       return GestureDetector(
-        onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => Gamepage(game))),
+        onTap: game.wasPlayed
+            ? () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => Gamepage(game)))
+            : () {},
         child: Container(
           color: AppColors.surface,
           padding: EdgeInsets.all(10.dw),

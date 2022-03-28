@@ -14,8 +14,8 @@ class BottomNavBar extends StatelessWidget {
             currentIndex: selectedIndex,
             onTap: _updateIndex,
             items: [
-              _buildItem(Icons.newspaper, 'News'),
               _buildItem(Icons.scoreboard, 'Scores'),
+              _buildItem(Icons.newspaper, 'News'),
               _buildItem(Icons.flag, 'Standings'),
               _buildItem(Icons.bar_chart, 'Stats'),
             ],

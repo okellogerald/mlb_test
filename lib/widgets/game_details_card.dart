@@ -39,7 +39,6 @@ class GameDetailsCard extends StatelessWidget {
         children: [
           Text(game.venue,
               style: const TextStyle(color: AppColors.onBackground2)),
-          SizedBox(height: 8.dh),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,18 +52,28 @@ class GameDetailsCard extends StatelessWidget {
                     _buildTeamDetails(game.awayTeam),
                   ],
                 ),
-                Expanded(
-                    child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Text(game.status.toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ))
+                _buildGameStatus()
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  _buildGameStatus() {
+    return Expanded(
+        child: Container(
+      alignment: Alignment.topRight,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.dw, vertical: 2.dh),
+        decoration: BoxDecoration(
+            border: Border.all(width: .5),
+            borderRadius: BorderRadius.all(Radius.circular(10.dw))),
+        child:
+            Text(game.status.toUpperCase(), style: TextStyle(fontSize: 14.dw)),
+      ),
+    ));
   }
 
   _buildTeamDetails(Team team) {
@@ -105,14 +114,15 @@ class GameDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(patcher.type),
-        Text(patcher.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.dw)),
+        Text(patcher.type, style: TextStyle(fontSize: 14.dw)),
         Row(
           children: [
-            Text('${patcher.wins} - ${patcher.losses} | ${patcher.era} ERA')
+            Text('${patcher.wins} - ${patcher.losses} | ${patcher.era} ERA',
+                style: TextStyle(fontSize: 14.dw))
           ],
-        )
+        ),
+        Text(patcher.name,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.dw))
       ],
     );
   }
@@ -125,7 +135,7 @@ class GameDetailsCard extends StatelessWidget {
         _buildScore('', homeTeam.name.substring(0, 3).toUpperCase(),
             awayTeam.name.substring(0, 3).toUpperCase()),
         _buildInningsGrid(),
-        AppDivider(height: 55.dh, width: 1.5),
+        AppDivider(height: 56.dh, width: 1.5),
         _buildScores()
       ],
     );
@@ -135,11 +145,12 @@ class GameDetailsCard extends StatelessWidget {
     final homeTeam = game.homeTeam;
     final awayTeam = game.awayTeam;
     return SizedBox(
-      height: 55.dh,
+      height: 56.dh,
       width: 80.dw,
       child: ListView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
         scrollDirection: Axis.horizontal,
         children: [
           _buildScore('R', homeTeam.runs, awayTeam.runs),
@@ -154,7 +165,13 @@ class GameDetailsCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.dw),
       child: Column(
-        children: [Text(title), Text(homeTeamValue), Text(awayTeamValue)],
+        children: [
+          Text(title, style: TextStyle(fontSize: 14.dh)),
+          Text(homeTeamValue,
+              style: TextStyle(fontSize: 14.dh, fontWeight: FontWeight.bold)),
+          Text(awayTeamValue,
+              style: TextStyle(fontSize: 14.dh, fontWeight: FontWeight.bold))
+        ],
       ),
     );
   }
@@ -162,10 +179,11 @@ class GameDetailsCard extends StatelessWidget {
   _buildInningsGrid() {
     return SizedBox(
       width: 230.dw,
-      height: 55.dh,
+      height: 56.dh,
       child: ListView(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.zero,
           children: List.generate(
               game.innings.length, (index) => _buildInning(index))),
     );
@@ -179,14 +197,19 @@ class GameDetailsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('${index + 1}',
-              style: const TextStyle(color: AppColors.onBackground2)),
+              style:
+                  TextStyle(color: AppColors.onBackground2, fontSize: 14.dw)),
           Text(inning.home,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: AppColors.onBackground)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onBackground,
+                  fontSize: 14.dh)),
           Text(inning.away,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: AppColors.onBackground))
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onBackground,
+                  fontSize: 14.dh))
         ],
       ),
     );
