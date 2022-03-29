@@ -24,8 +24,8 @@ class Team {
       wins: isHome ? json['home_win'] : json['away_win'],
       losses: isHome ? json['home_loss'] : json['away_loss'],
       runs: isHome ? runs['home'] : runs['away'],
-      errors: isHome ? errors['home'] : runs['away'],
-      hits: isHome ? hits['home'] : runs['away'],
+      errors: isHome ? errors['home'] : errors['away'],
+      hits: isHome ? hits['home'] : hits['away'],
     );
   }
 

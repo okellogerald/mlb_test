@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
-  static final _selectedTabIndexNotifier = ValueNotifier<int>(0);
+ static final _selectedTabIndexNotifier = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {

@@ -19,20 +19,10 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        child: Scaffold(
-          appBar: _buildAppBar(),
-          body: _buildBody(),
-          bottomNavigationBar: const BottomNavBar(),
-        ),
-      ),
-    );
-  }
-
-  _buildAppBar() {
-    return AppTopBar(onDateSelected: _onDateSelected);
+    return Scaffold(
+        appBar: AppTopBar(onDateSelected: _onDateSelected),
+        body: _buildBody(),
+        bottomNavigationBar: const BottomNavBar());
   }
 
   _buildBody() {

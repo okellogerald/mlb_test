@@ -1,9 +1,9 @@
 enum PatcherType { winning, losing, saving }
 
-class Patcher {
+class Pitcher {
   final String id, name, wins, losses, era, type;
 
-  const Patcher(
+  const Pitcher(
       {required this.id,
       required this.name,
       required this.wins,
@@ -11,8 +11,8 @@ class Patcher {
       required this.type,
       required this.era});
 
-  factory Patcher.fromJson(var json, String type) {
-    return Patcher(
+  factory Pitcher.fromJson(var json, String type) {
+    return Pitcher(
         name: '${json['first']} ${json['last']}',
         wins: json['wins'],
         era: json['era'],

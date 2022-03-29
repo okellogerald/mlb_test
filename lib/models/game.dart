@@ -1,13 +1,13 @@
-import 'package:mlb_test1/source.dart';
 import 'inning.dart';
-import 'patcher.dart';
+import 'pitcher.dart';
 import 'team.dart';
+
 
 class Game {
   final String id, venue, time, status, gameDateDirectory;
   final Team homeTeam, awayTeam;
-  final Patcher winningPatcher, losingPatcher;
-  final Patcher? savingPatcher;
+  final Pitcher winningPitcher, losingPitcher;
+  final Pitcher? savingPitcher;
   final List<Inning> innings;
 
   const Game(
@@ -17,9 +17,9 @@ class Game {
       required this.venue,
       required this.time,
       required this.status,
-      required this.winningPatcher,
-      required this.losingPatcher,
-      required this.savingPatcher,
+      required this.winningPitcher,
+      required this.losingPitcher,
+      required this.savingPitcher,
       required this.gameDateDirectory,
       required this.innings});
 
@@ -33,18 +33,18 @@ class Game {
         venue: json['venue'],
         time: json['time'] + json['ampm'],
         status: json['status']['status'],
-        winningPatcher: Patcher.fromJson(json['winning_pitcher'], 'WIN'),
-        losingPatcher: Patcher.fromJson(json['losing_pitcher'], 'LOSS'),
-        savingPatcher: ((json['save_pitcher'] as Map)['id'] as String).isEmpty
+        winningPitcher: Pitcher.fromJson(json['winning_pitcher'], 'WIN'),
+        losingPitcher: Pitcher.fromJson(json['losing_pitcher'], 'LOSS'),
+        savingPitcher: ((json['save_pitcher'] as Map)['id'] as String).isEmpty
             ? null
-            : Patcher.fromJson(json['save_pitcher'], 'SAVE'),
+            : Pitcher.fromJson(json['save_pitcher'], 'SAVE'),
         gameDateDirectory: json['game_data_directory'],
         innings: innings ?? []);
   }
 
-  List<Patcher> get patchers => savingPatcher == null
-      ? [winningPatcher, losingPatcher]
-      : [winningPatcher, losingPatcher, savingPatcher!];
+  List<Pitcher> get patchers => savingPitcher == null
+      ? [winningPitcher, losingPitcher]
+      : [winningPitcher, losingPitcher, savingPitcher!];
 
   Team get winningTeam =>
       homeTeam.totalRuns > awayTeam.totalRuns ? homeTeam : awayTeam;

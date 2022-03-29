@@ -1,6 +1,6 @@
 import 'package:mlb_test1/widgets/app_divider.dart';
 import '../models/game.dart';
-import '../models/patcher.dart';
+import '../models/pitcher.dart';
 import '../models/team.dart';
 import '../source.dart';
 
@@ -110,7 +110,7 @@ class GameDetailsCard extends StatelessWidget {
     );
   }
 
-  _buildPatcher(Patcher patcher) {
+  _buildPatcher(Pitcher patcher) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
